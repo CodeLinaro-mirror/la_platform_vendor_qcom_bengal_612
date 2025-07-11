@@ -51,7 +51,6 @@ on init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     start vendor.qseecomd
-    start keymaster-4-0
 
 on early-fs
     start vold
@@ -70,7 +69,6 @@ on post-fs
 
 on late-fs
     wait_for_prop hwservicemanager.ready true
-    exec_start wait_for_keymaster
     mount_all --late
 
 on post-fs-data
@@ -118,15 +116,6 @@ service vendor.per_proxy /vendor/bin/pm-proxy
     user system
     group system
     disabled
-
-service vendor.mdm_helper /vendor/bin/mdm_helper
-    class core
-    group system wakelock
-    disabled
-
-service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
-    class core
-    oneshot
 
 on property:init.svc.vendor.per_mgr=running
     start vendor.per_proxy

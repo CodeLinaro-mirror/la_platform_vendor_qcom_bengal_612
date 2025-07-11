@@ -1,32 +1,40 @@
 TARGET_BOARD_PLATFORM := bengal
-TARGET_BOARD_SUFFIX := _515
+TARGET_BOARD_SUFFIX := _612
+TARGET_BOARD_FAMILY := f-bengal
+TARGET_BOOTLOADER_BOARD_NAME := bengal
 
+BUILD_BROKEN_DUP_RULES := true
 ALLOW_MISSING_DEPENDENCIES := true
 RELAX_USES_LIBRARY_CHECK := true
+
+#Flag to Enable 64 bit only configurayion
+TARGET_SUPPORTS_64_BIT_ONLY := true
 
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 
-# Enable Virtual A/B
+# Default Android A/B configuration
+ENABLE_AB ?= true
+
+# Enable virtual A/B
 ENABLE_VIRTUAL_AB := true
 
 # Enable virtual A/B compression
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
-
-# Default A/B configuration
-ENABLE_AB ?= true
+$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
+PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
+PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.compression.threads=true
 
 SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
 
 # Enable Dynamic partition
 BOARD_DYNAMIC_PARTITION_ENABLE ?= true
 
-SHIPPING_API_LEVEL := 33
-PRODUCT_SHIPPING_API_LEVEL := $(SHIPPING_API_LEVEL)
+SHIPPING_API_LEVEL := 36
+PRODUCT_SHIPPING_API_LEVEL := 36
 
 # Set GRF/Vendor freeze properties
-BOARD_SHIPPING_API_LEVEL := 33
-BOARD_API_LEVEL := 33
+BOARD_SHIPPING_API_LEVEL := 202504
 
 # For QSSI builds, we should skip building the system image. Instead we build the
 # "non-system" images (that we support).
@@ -80,7 +88,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
  checkpoint_gc
 
-ifeq ($(ENABLE_AB), true)
 # Userdata checkpoint start
 AB_OTA_POSTINSTALL_CONFIG += \
 RUN_POSTINSTALL_vendor=true \
@@ -88,11 +95,21 @@ POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
 FILESYSTEM_TYPE_vendor=ext4 \
 POSTINSTALL_OPTIONAL_vendor=true
 # Userdata checkpoint end
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.default
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.emmc
+
+ifeq ($(ENABLE_AB),true)
+ifeq ($(SYSTEMEXT_SEPARATE_PARTITION_ENABLE), true)
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.default
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc
 else
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_non_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.default
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.emmc
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_noSysext.qcom:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.qcom
+endif
+else
+ifeq ($(SYSTEMEXT_SEPARATE_PARTITION_ENABLE), true)
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/default/fstab_non_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/emmc/fstab_non_AB_dynamic_partition.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.emmc
+else
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_non_AB_noSysext.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+endif
 endif
 BOARD_AVB_VBMETA_SYSTEM := system
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
@@ -123,27 +140,15 @@ PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 TARGET_DEFINES_DALVIK_HEAP := true
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, device/qcom/vendor-common/common64.mk)
-# Temporary bring-up config <--
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
-# Temporary bring-up config -->
-PRODUCT_SUPPORTS_VERITY := false
-# Temporary bring-up config <--
-###########
-PRODUCT_PROPERTY_OVERRIDES  += \
-     dalvik.vm.heapstartsize=8m \
-     dalvik.vm.heapsize=256m \
-     dalvik.vm.heapgrowthlimit=128m \
-     dalvik.vm.heaptargetutilization=0.75 \
-     dalvik.vm.heapminfree=512k \
-     dalvik.vm.heapmaxfree=8m
 # Target naming
-PRODUCT_NAME := bengal_515
-PRODUCT_DEVICE := bengal_515
+PRODUCT_NAME := bengal_612
+PRODUCT_DEVICE := bengal_612
 PRODUCT_BRAND := qti
 PRODUCT_MODEL := Bengal for arm64
-
 
 TARGET_USES_AOSP := false
 TARGET_USES_AOSP_FOR_AUDIO := false
@@ -156,19 +161,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.beluga.s=0x900 \
     ro.vendor.beluga.t=0x240
 
-# Below perf props should be part of vendor/build.prop
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so \
-    ro.vendor.perf-hal.ver=2.3 \
-    ro.vendor.perf.scroll_opt=1 \
-    vendor.perf.framepacing.enable=1
-
 # RRO configuration
 TARGET_USES_RRO := true
 
 TARGET_DISABLE_DISPLAY := false
-
-NEED_AIDL_NDK_PLATFORM_BACKEND := true
+TARGET_NO_QSH_WWAN_SUPPORT := true
 
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
@@ -190,51 +187,53 @@ TARGET_USES_QMAA_RECOMMENDED_BOOT_CONFIG := true
 #QMAA tech team flag to override global QMAA per tech team
 #true means overriding global QMAA for this tech area
 #false means using global, no override
-TARGET_USES_QMAA_OVERRIDE_RPMB := true
-TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := true
-TARGET_USES_QMAA_OVERRIDE_GPT := true
-TARGET_USES_QMAA_OVERRID_KMGK := true
-TARGET_USES_QMAA_OVERRIDE_DISPLAY := true
+TARGET_USES_QMAA_OVERRIDE_RPMB := false
+TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := false
+TARGET_USES_QMAA_OVERRIDE_GPT := false
+TARGET_USES_QMAA_OVERRID_KMGK := false
+TARGET_USES_QMAA_OVERRIDE_DISPLAY := false
 # Set to true
-TARGET_USES_QMAA_OVERRIDE_AUDIO   := true
-TARGET_USES_QMAA_OVERRIDE_VIDEO   := true
+TARGET_USES_QMAA_OVERRIDE_AUDIO   := false
+TARGET_USES_QMAA_OVERRIDE_VIDEO   := false
 TARGET_USES_QMAA_OVERRIDE_CAMERA  := false
-TARGET_USES_QMAA_OVERRIDE_GFX     := true
+TARGET_USES_QMAA_OVERRIDE_GFX     := false
 TARGET_USES_QMAA_OVERRIDE_WFD     := false
-TARGET_USES_QMAA_OVERRIDE_GPS     := true
+TARGET_USES_QMAA_OVERRIDE_GPS     := false
 TARGET_USES_QMAA_OVERRIDE_ANDROID_RECOVERY := true
 TARGET_USES_QMAA_OVERRIDE_ANDROID_CORE := true
 TARGET_USES_QMAA_OVERRIDE_WLAN    := false
 TARGET_USES_QMAA_OVERRIDE_DPM  := false
-TARGET_USES_QMAA_OVERRIDE_BLUETOOTH   := true
+TARGET_USES_QMAA_OVERRIDE_BLUETOOTH   := false
 TARGET_USES_QMAA_OVERRIDE_FM  := false
 TARGET_USES_QMAA_OVERRIDE_CVP  := false
-TARGET_USES_QMAA_OVERRIDE_FASTCV  := true
-TARGET_USES_QMAA_OVERRIDE_SCVE  := true
-TARGET_USES_QMAA_OVERRIDE_OPENVX  := true
+TARGET_USES_QMAA_OVERRIDE_FASTCV  := false
+TARGET_USES_QMAA_OVERRIDE_FASTRPC := false
+TARGET_USES_QMAA_OVERRIDE_SCVE  := false
+TARGET_USES_QMAA_OVERRIDE_OPENVX  := false
 TARGET_USES_QMAA_OVERRIDE_DIAG := false
 TARGET_USES_QMAA_OVERRIDE_FTM := false
 TARGET_USES_QMAA_OVERRIDE_DATA := false
-TARGET_USES_QMAA_OVERRIDE_DATA_NET := true
+TARGET_USES_QMAA_OVERRIDE_DATA_NET := false
 TARGET_USES_QMAA_OVERRIDE_KERNEL_TESTS_INTERNAL := false
-TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := true
+TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := false
 TARGET_USES_QMAA_OVERRIDE_VIBRATOR := false
-TARGET_USES_QMAA_OVERRIDE_DRM     := true
-TARGET_USES_QMAA_OVERRIDE_KMGK := true
+TARGET_USES_QMAA_OVERRIDE_DRM     := false
+TARGET_USES_QMAA_OVERRIDE_KMGK := false
 TARGET_USES_QMAA_OVERRIDE_VPP := false
 TARGET_USES_QMAA_OVERRIDE_GP := false
-TARGET_USES_QMAA_OVERRIDE_BIOMETRICS := true
+TARGET_USES_QMAA_OVERRIDE_BIOMETRICS := false
 TARGET_USES_QMAA_OVERRIDE_SPCOM_UTEST := false
-TARGET_USES_QMAA_OVERRIDE_PERF := true
-TARGET_USES_QMAA_OVERRIDE_SENSORS := true
+TARGET_USES_QMAA_OVERRIDE_PERF := false
+TARGET_USES_QMAA_OVERRIDE_SENSORS := false
 TARGET_USES_QMAA_OVERRIDE_SYNX := false
 TARGET_USES_QMAA_OVERRIDE_SECUREMSM_TESTS := false
 TARGET_USES_QMAA_OVERRIDE_SOTER := false
 TARGET_USES_QMAA_OVERRIDE_REMOTE_EFS := false
 TARGET_USES_QMAA_OVERRIDE_TFTP := false
 TARGET_USES_QMAA_OVERRIDE_EID := false
+TARGET_USES_QMAA_OVERRIDE_USB := true
 
-TARGET_ENABLE_QSEECOM := true
+TARGET_ENABLE_QSEECOM := false
 #Full QMAA HAL List
 QMAA_HAL_LIST := audio video camera display sensors gps
 
@@ -243,15 +242,20 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.confqmaa=true
 endif
 
+ifeq ($(TARGET_USES_QMAA_OVERRIDE_USB), true)
+PRODUCT_PROPERTY_OVERRIDES += vendor.usb.use_gadget_hal=0
+PRODUCT_PROPERTY_OVERRIDES += persist.vendor.usb.config=adb
+endif
+
 ###########
 #QMAA flags ends
-
-CLEAN_UP_JAVA_IN_VENDOR ?= enforcing
 
 JAVA_IN_VENDOR_SOONG_WHITE_LIST :=\
 CuttlefishService\
 pasrservice\
 VendorPrivAppPermissionTest\
+MediaDrmAPITest\
+CastSignAPITest\
 
 JAVA_IN_VENDOR_MAKE_WHITE_LIST :=\
 AEye\
@@ -263,7 +267,31 @@ TARGET_KERNEL_VERSION := 5.15
 TARGET_USES_NEW_ION := true
 
 # Disable DLKM generation until build support is available
-TARGET_KERNEL_DLKM_DISABLE := false
+TARGET_KERNEL_DLKM_DISABLE := true
+
+# Tech specific flags
+TARGET_KERNEL_DLKM_AUDIO_OVERRIDE := false
+TARGET_KERNEL_DLKM_BT_OVERRIDE := false
+TARGET_KERNEL_DLKM_CAMERA_OVERRIDE := false
+TARGET_KERNEL_DLKM_NFC_OVERRIDE := false
+TARGET_KERNEL_DLKM_ESE_OVERRIDE := false
+TARGET_KERNEL_DLKM_DATA_OVERRIDE := false
+TARGET_KERNEL_DLKM_DISPLAY_OVERRIDE := false
+TARGET_KERNEL_DLKM_MM_DRV_OVERRIDE := false
+TARGET_KERNEL_DLKM_SECURE_MSM_OVERRIDE := false
+TARGET_KERNEL_DLKM_SECUREMSM_QTEE_OVERRIDE := false
+TARGET_KERNEL_DLKM_LIMITS_OVERRIDE := false
+TARGET_KERNEL_DLKM_TOUCH_OVERRIDE := false
+TARGET_KERNEL_DLKM_VIDEO_OVERRIDE := false
+TARGET_KERNEL_DLKM_WLAN_OVERRIDE := false
+TARGET_KERNEL_DLKM_MMRM_OVERRIDE := false
+TARGET_KERNEL_DLKM_DATARMNET_OVERRIDE := false
+TARGET_KERNEL_DLKM_DATARMNETEXT_OVERRIDE := false
+TARGET_KERNEL_DLKM_SYNX_OVERRIDE := false
+TARGET_KERNEL_DLKM_DATAIPA_OVERRIDE := false
+TARGET_KERNEL_DLKM_FASTRPC_OVERRIDE := false
+TARGET_KERNEL_DLKM_EVA_OVERRIDE := false
+TARGET_KERNEL_DLKM_SPU_OVERRIDE := false
 
 #Suppot to compile recovery without msm headers
 TARGET_HAS_GENERIC_KERNEL_HEADERS := true
@@ -295,12 +323,12 @@ ifeq ($(ENABLE_AB), true)
 PRODUCT_PACKAGES += update_engine \
     update_engine_client \
     update_verifier \
-    android.hardware.boot@1.2-impl-qti \
-    android.hardware.boot@1.2-impl-qti.recovery \
-    android.hardware.boot@1.2-service
+    android.hardware.boot-service.qti \
+    android.hardware.boot-service.qti.recovery
 
 PRODUCT_HOST_PACKAGES += \
     brillo_update_payload
+
 # Boot control HAL test app
 PRODUCT_PACKAGES_DEBUG += bootctl
 
@@ -308,9 +336,9 @@ PRODUCT_PACKAGES += \
   update_engine_sideload
 
 endif
-DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/bengal_515/framework_manifest.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/bengal_612/framework_manifest.xml
 
-DEVICE_MANIFEST_FILE := device/qcom/bengal_515/manifest.xml
+DEVICE_MANIFEST_FILE := device/qcom/bengal_612/manifest.xml
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 
 # Enable compilation of image_generation_tool
@@ -416,6 +444,9 @@ endif
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 FEATURE_SLIM_AP := false
 FEATURE_GPS_LOC_QSH := false
+
+# Enable support for APEX updates
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
 ###################################################################################
 # This is the End of target.mk file.

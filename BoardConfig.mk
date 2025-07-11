@@ -6,7 +6,7 @@
 BOARD_SYSTEMSDK_VERSIONS := $(SHIPPING_API_LEVEL)
 
 TARGET_BOARD_PLATFORM := bengal
-TARGET_BOARD_SUFFIX := _515
+TARGET_BOARD_SUFFIX := _612
 TARGET_BOOTLOADER_BOARD_NAME := bengal
 
 TARGET_ARCH := arm64
@@ -14,12 +14,6 @@ TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
-
-TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
-TARGET_2ND_CPU_ABI := armeabi-v7a
-TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a9
 
 #Generate DTBO image
 BOARD_KERNEL_SEPARATED_DTBO := false
@@ -32,7 +26,7 @@ TARGET_USES_REMOTEPROC := true
 TARGET_NO_KERNEL := false
 TARGET_SIGNONLY_BOOTLOADER := true
 
-BOARD_PRESIL_BUILD := true
+BOARD_RAMDISK_USE_LZ4 := true
 -include $(QCPATH)/common/bengal/BoardConfigVendor.mk
 
 USE_OPENGL_RENDERER := true
@@ -79,10 +73,10 @@ ifeq ($(ENABLE_AB), true)
        BOARD_SUPER_PARTITION_SIZE := 12884901888
    endif
 
-   TARGET_RECOVERY_FSTAB := device/qcom/bengal_515/recovery_AB_dynamic_partition.fstab
+   TARGET_RECOVERY_FSTAB := device/qcom/bengal_612/recovery_AB_dynamic_partition.fstab
 else
    BOARD_SUPER_PARTITION_SIZE := 6442450944
-   TARGET_RECOVERY_FSTAB := device/qcom/bengal_515/recovery_non-AB_dynamic_partition.fstab
+   TARGET_RECOVERY_FSTAB := device/qcom/bengal_612/recovery_non-AB_dynamic_partition.fstab
 endif
 ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
    # Enable DTBO for recovery image
@@ -142,7 +136,7 @@ BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=qcom_geni,0x4a90000 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 bootconfig printk.devkmsg=on
 
-BOARD_BOOTCONFIG += androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1
+BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -158,7 +152,6 @@ MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 
 BOARD_USES_GENERIC_AUDIO := true
-BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_NO_RPC := true
 
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
