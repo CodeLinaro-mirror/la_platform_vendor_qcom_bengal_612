@@ -72,24 +72,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>legacy/0</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-        <name>android.hardware.audio</name>
-        <transport>hwbinder</transport>
-        <version>7.0</version>
-        <interface>
-            <name>IDevicesFactory</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.audio.effect</name>
-        <transport>hwbinder</transport>
-        <version>7.0</version>
-        <interface>
-            <name>IEffectsFactory</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <!-- graphics renderscript-->
     <hal format="hidl">
         <name>android.hardware.renderscript</name>
@@ -226,27 +208,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <name>IWifiDisplaySessionImageTrack</name>
             <instance>wifidisplaysessionimagetrack</instance>
         </interface>
-    </hal>
-    <!-- AGM service-->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.AGMIPC</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAGM</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- Audio PAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.pal</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IPAL</name>
-            <instance>default</instance>
-        </interface>
-        <fqname>@1.0::IPAL/default</fqname>
     </hal>
     <hal format="hidl">
         <name>android.hardware.drm</name>
