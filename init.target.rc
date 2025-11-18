@@ -93,6 +93,10 @@ on boot && property:persist.vendor.usb.controller.default=*
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
 
+on init && property:ro.boot.mode=charger
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+
 on charger
     start vendor.power_off_alarm
     setprop vendor.usb.controller 4e00000.dwc3
