@@ -63,15 +63,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 -->
 <manifest version="1.0" type="device" target-level="6">
     <kernel target-level="7"/>
-    <hal format="hidl">
-        <name>android.hardware.camera.provider</name>
-        <transport>hwbinder</transport>
-        <version>2.4</version>
-        <interface>
-            <name>ICameraProvider</name>
-            <instance>legacy/0</instance>
-        </interface>
-    </hal>
     <!-- graphics renderscript-->
     <hal format="hidl">
         <name>android.hardware.renderscript</name>
@@ -515,16 +506,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>qti-default</instance>
             <instance>qti-dsp</instance>
             <instance>qti-gpu</instance>
-        </interface>
-    </hal>
-    <!-- Camera PostProcessing service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.camera.postproc</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IPostProcService</name>
-            <instance>camerapostprocservice</instance>
         </interface>
     </hal>
     <!--  QCC HAL Service -->
