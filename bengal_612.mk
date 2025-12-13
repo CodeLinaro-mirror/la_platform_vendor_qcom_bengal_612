@@ -1,5 +1,9 @@
 TARGET_BOARD_PLATFORM := bengal
 TARGET_BOARD_SUFFIX := _612
+TARGET_USE_QTI_VND_FWK_DETECT := true
+TARGET_USE_QTI_BT_CONFIGSTORE := true
+BOARD_HAVE_QTI_BT_SERVICE_VER_1_1 := true
+PRODUCT_PROPERTY_OVERRIDES += ro.vendor.qti.va_odm.support=true
 TARGET_BOARD_FAMILY := f-bengal
 TARGET_BOOTLOADER_BOARD_NAME := bengal
 
@@ -122,7 +126,7 @@ ifneq ("$(wildcard device/qcom/$(TARGET_BOARD_PLATFORM)-kernel/vendor_dlkm/syste
 PRODUCT_COPY_FILES += device/qcom/$(TARGET_BOARD_PLATFORM)-kernel/vendor_dlkm/system_dlkm.modules.blocklist:$(TARGET_COPY_OUT_VENDOR_DLKM)/lib/modules/system_dlkm.modules.blocklist
 endif
 
-BOARD_HAVE_BLUETOOTH := false
+BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_QCOM_FM := false
 TARGET_DISABLE_PERF_OPTIMIATIONS := false
 
@@ -203,7 +207,7 @@ TARGET_USES_QMAA_OVERRIDE_ANDROID_RECOVERY := true
 TARGET_USES_QMAA_OVERRIDE_ANDROID_CORE := true
 TARGET_USES_QMAA_OVERRIDE_WLAN    := true
 TARGET_USES_QMAA_OVERRIDE_DPM  := false
-TARGET_USES_QMAA_OVERRIDE_BLUETOOTH   := false
+TARGET_USES_QMAA_OVERRIDE_BLUETOOTH   := true
 TARGET_USES_QMAA_OVERRIDE_FM  := false
 TARGET_USES_QMAA_OVERRIDE_CVP  := false
 TARGET_USES_QMAA_OVERRIDE_FASTCV  := true
@@ -272,7 +276,7 @@ TARGET_KERNEL_DLKM_DISABLE := true
 
 # Tech specific flags
 TARGET_KERNEL_DLKM_AUDIO_OVERRIDE := false
-TARGET_KERNEL_DLKM_BT_OVERRIDE := false
+TARGET_KERNEL_DLKM_BT_OVERRIDE := true
 TARGET_KERNEL_DLKM_CAMERA_OVERRIDE := false
 TARGET_KERNEL_DLKM_NFC_OVERRIDE := false
 TARGET_KERNEL_DLKM_ESE_OVERRIDE := false
@@ -418,6 +422,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Property to disable ZSL mode
 PRODUCT_PROPERTY_OVERRIDES += \
     camera.disable_zsl_mode=1
+
+# Disable BTTPI (Bluetooth TPI) for Bengal
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vendor.qcom.bluetooth.tpi_supported=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
 ro.crypto.volume.filenames_mode = "aes-256-cts" \
