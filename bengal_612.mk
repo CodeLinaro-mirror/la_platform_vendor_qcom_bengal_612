@@ -25,6 +25,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.m
 PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.compression.threads=true
 
+# Enable debugfs restrictions
+PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
+
 SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
 
 # Enable Dynamic partition
