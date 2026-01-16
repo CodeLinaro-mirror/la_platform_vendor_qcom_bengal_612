@@ -72,8 +72,8 @@ BOARD_AVB_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
 else
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_PACKAGES += fastbootd
-# Add default implementation of fastboot HAL.
-PRODUCT_PACKAGES += android.hardware.fastboot@1.0-impl-mock
+# Add default implementation of fastboot AIDL.
+PRODUCT_PACKAGES += android.hardware.fastboot-service.example_recovery
 
 # diag-router
 TARGET_HAS_DIAG_ROUTER := true
