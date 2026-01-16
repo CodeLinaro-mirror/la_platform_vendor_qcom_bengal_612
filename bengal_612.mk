@@ -33,6 +33,11 @@ SYSTEMEXT_SEPARATE_PARTITION_ENABLE = true
 # Enable Dynamic partition
 BOARD_DYNAMIC_PARTITION_ENABLE ?= true
 
+# Enable Fuse FS
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+# Enable Fuse Passthrough
+PRODUCT_PROPERTY_OVERRIDES += persist.sys.fuse.passthrough.enable=true
+
 SHIPPING_API_LEVEL := 36
 PRODUCT_SHIPPING_API_LEVEL := 36
 
