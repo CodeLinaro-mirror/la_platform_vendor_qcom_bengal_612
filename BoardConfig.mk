@@ -2,9 +2,6 @@
 #
 # Product-specific compile-time definitions.
 #
-
-BOARD_SYSTEMSDK_VERSIONS := $(SHIPPING_API_LEVEL)
-
 TARGET_BOARD_PLATFORM := bengal
 TARGET_BOARD_SUFFIX := _612
 TARGET_BOOTLOADER_BOARD_NAME := bengal

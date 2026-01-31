@@ -56,7 +56,6 @@ on early-fs
     start vold
 
 on fs
-    start hwservicemanager
     mount_all --early
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
@@ -68,7 +67,6 @@ on post-fs
     setrlimit 8 67108864 67108864
 
 on late-fs
-    wait_for_prop hwservicemanager.ready true
     mount_all --late
 
 on post-fs-data
