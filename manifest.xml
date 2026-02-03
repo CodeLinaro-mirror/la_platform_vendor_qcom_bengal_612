@@ -360,18 +360,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
     </hal>
     <!--ANT-->
 
-    <!-- Neural Network HAL -->
-    <hal format="hidl">
-        <name>android.hardware.neuralnetworks</name>
-        <transport>hwbinder</transport>
-        <version>1.2</version>
-        <interface>
-            <name>IDevice</name>
-            <instance>qti-default</instance>
-            <instance>qti-dsp</instance>
-            <instance>qti-gpu</instance>
-        </interface>
-    </hal>
     <!--  QCC HAL Service -->
     <hal format="hidl">
        <name>vendor.qti.hardware.qccvndhal</name>
