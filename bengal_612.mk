@@ -221,7 +221,7 @@ TARGET_USES_QMAA_OVERRIDE_DATA_NET := true
 TARGET_USES_QMAA_OVERRIDE_DATA_CONNECTIVITY := true
 TARGET_USES_QMAA_OVERRIDE_RIL_DATA := true
 TARGET_USES_QMAA_OVERRIDE_KERNEL_TESTS_INTERNAL := false
-TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := false
+TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := true
 TARGET_USES_QMAA_OVERRIDE_VIBRATOR := false
 TARGET_USES_QMAA_OVERRIDE_DRM     := false
 TARGET_USES_QMAA_OVERRIDE_KMGK := false
@@ -293,6 +293,7 @@ TARGET_KERNEL_DLKM_DATAIPA_OVERRIDE := true
 TARGET_KERNEL_DLKM_FASTRPC_OVERRIDE := true
 TARGET_KERNEL_DLKM_EVA_OVERRIDE := false
 TARGET_KERNEL_DLKM_SPU_OVERRIDE := false
+TARGET_KERNEL_DLKM_SAT_MODULE_OVERRIDE := true
 
 #Suppot to compile recovery without msm headers
 TARGET_HAS_GENERIC_KERNEL_HEADERS := true
@@ -457,7 +458,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
 ###################################################################################
-# TODO: Relocate the system product.mk files pickup into qssi lunch, once it is up.
-$(call inherit-product-if-exists, vendor/qcom/defs/product-defs/system/*.mk)
-$(call inherit-product-if-exists, vendor/qcom/defs/product-defs/vendor/*.mk)
+$(foreach vdefs, $(sort $(wildcard vendor/qcom/defs/product-defs/vendor/*.mk)), \
+    $(call inherit-product, $(vdefs)))
 ###################################################################################
