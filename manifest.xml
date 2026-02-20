@@ -62,6 +62,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 ==========================================================================
 -->
 <manifest version="1.0" type="device" target-level="202504">
+    <!-- secure element -->
+    <hal format="aidl">
+        <name>android.hardware.secure_element</name>
+        <version>1</version>
+        <fqname>ISecureElement/eSE1</fqname>
+    </hal>
     <!-- NFC HAL service -->
     <hal format="aidl">
         <name>android.hardware.nfc</name>
