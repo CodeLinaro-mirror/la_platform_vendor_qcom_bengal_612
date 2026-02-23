@@ -93,6 +93,32 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>wifiStats</instance>
         </interface>
     </hal>
+    <!-- WFD HAL Service (AIDL) -->
+    <hal format="aidl" optional="true">
+        <name>vendor.qti.hardware.wifidisplaysession_aidl</name>
+        <version>1</version>
+        <interface>
+            <name>IWifiDisplaySession</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IWifiDisplaySessionVideoTrack</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IWifiDisplaySessionAudioTrack</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IWifiDisplaySessionImageTrack</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.drm</name>
+        <version>1</version>
+        <fqname>IDrmFactory/wfdhdcp</fqname>
+    </hal>
    <!-- IMS callinfo Service -->
    <hal format="hidl">
        <name>vendor.qti.ims.callinfo</name>
