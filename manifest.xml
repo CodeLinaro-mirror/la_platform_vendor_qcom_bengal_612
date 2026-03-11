@@ -274,26 +274,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.hardware.btconfigstore</name>
-        <transport>hwbinder</transport>
-        <version>2.0</version>
-        <interface>
-            <name>IBTConfigStore</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- BluetoothSar service-->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.bluetooth_sar</name>
-        <transport>hwbinder</transport>
-        <version>1.1</version>
-        <interface>
-            <name>IBluetoothSar</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- fm -->
-    <hal format="hidl">
         <name>vendor.qti.hardware.fm</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -302,18 +282,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>default</instance>
         </interface>
     </hal>
-
-    <!--ANT-->
-    <hal format="hidl">
-        <name>com.dsi.ant</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAnt</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!--ANT-->
 
     <!--  QCC HAL Service -->
     <hal format="hidl">
