@@ -47,7 +47,8 @@ PRODUCT_SHIPPING_API_LEVEL := 36
 
 # Set GRF/Vendor freeze properties
 BOARD_SHIPPING_API_LEVEL := 202504
-
+#Enable SMCI-Listeners.
+TARGET_ENABLE_SMCI_SYSLISTENER := true
 # For QSSI builds, we should skip building the system image. Instead we build the
 # "non-system" images (that we support).
 
@@ -199,10 +200,9 @@ TARGET_USES_QMAA_RECOMMENDED_BOOT_CONFIG := true
 #QMAA tech team flag to override global QMAA per tech team
 #true means overriding global QMAA for this tech area
 #false means using global, no override
-TARGET_USES_QMAA_OVERRIDE_RPMB := false
+TARGET_USES_QMAA_OVERRIDE_RPMB := true
 TARGET_USES_QMAA_OVERRIDE_SMCINVOKE := true
-TARGET_USES_QMAA_OVERRIDE_GPT := false
-TARGET_USES_QMAA_OVERRID_KMGK := false
+TARGET_USES_QMAA_OVERRIDE_GPT := true
 TARGET_USES_QMAA_OVERRIDE_DISPLAY := true
 # Set to true
 TARGET_USES_QMAA_OVERRIDE_AUDIO   := true
@@ -234,7 +234,7 @@ TARGET_USES_QMAA_OVERRIDE_MSMIRQBALANCE := true
 TARGET_USES_QMAA_OVERRIDE_MSM_BUS_MODULE := true
 TARGET_USES_QMAA_OVERRIDE_VIBRATOR := true
 TARGET_USES_QMAA_OVERRIDE_DRM     := false
-TARGET_USES_QMAA_OVERRIDE_KMGK := false
+TARGET_USES_QMAA_OVERRIDE_KMGK := true
 TARGET_USES_QMAA_OVERRIDE_VPP := false
 TARGET_USES_QMAA_OVERRIDE_GP := true
 TARGET_USES_QMAA_OVERRIDE_BIOMETRICS := true
