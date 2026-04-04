@@ -445,6 +445,9 @@ FEATURE_GPS_LOC_QSH := false
 # Enable support for APEX updates
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
+#Enable virtualization service
+$(call inherit-product, packages/modules/Virtualization/build/apex/product_packages.mk)
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
