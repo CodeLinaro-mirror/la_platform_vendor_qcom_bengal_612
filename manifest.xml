@@ -61,18 +61,7 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 ==========================================================================
 -->
-<manifest version="1.0" type="device" target-level="6">
-    <kernel target-level="7"/>
-    <!-- graphics renderscript-->
-    <hal format="hidl">
-        <name>android.hardware.renderscript</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IDevice</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
+<manifest version="1.0" type="device" target-level="202504">
     <!-- Iop HAL service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.iop</name>
@@ -80,72 +69,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <version>2.0</version>
         <interface>
             <name>IIop</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- secure element -->
-    <hal format="hidl">
-       <name>android.hardware.secure_element</name>
-       <transport>hwbinder</transport>
-       <version>1.2</version>
-       <interface>
-           <name>ISecureElement</name>
-           <instance>SIM1</instance>
-           <instance>SIM2</instance>
-           <instance>eSE1</instance>
-       </interface>
-    </hal>
-    <!-- eSEPowerManager -->
-    <hal format="hidl">
-        <name>vendor.qti.esepowermanager</name>
-        <transport>hwbinder</transport>
-        <version>1.1</version>
-        <interface>
-            <name>IEsePowerManager</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- QSEECom HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.qseecom</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IQSEECom</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- QTEEConnector HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.qteeconnector</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAppConnector</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IGPAppConnector</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- TUI Communicator service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.tui_comm</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ITuiComm</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!--  Soter service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.soter</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ISoter</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -160,6 +83,15 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <version>1</version>
         <fqname>INxpNfc/default</fqname>
     </hal>
+    <!-----gatekeeper--->
+    <hal format="aidl">
+        <name>android.hardware.gatekeeper</name>
+        <version>1</version>
+        <interface>
+            <name>IGatekeeper</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <!-- WifiStats HAL service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.wifi.wifilearner</name>
@@ -170,43 +102,31 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>wifiStats</instance>
         </interface>
     </hal>
-    <!-- WFD HAL Service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.wifidisplaysession</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
+    <!-- WFD HAL Service (AIDL) -->
+    <hal format="aidl" optional="true">
+        <name>vendor.qti.hardware.wifidisplaysession_aidl</name>
+        <version>1</version>
         <interface>
             <name>IWifiDisplaySession</name>
-            <instance>wifidisplaysession</instance>
+            <instance>default</instance>
         </interface>
         <interface>
             <name>IWifiDisplaySessionVideoTrack</name>
-            <instance>wifidisplaysessionvideotrack</instance>
+            <instance>default</instance>
         </interface>
         <interface>
             <name>IWifiDisplaySessionAudioTrack</name>
-            <instance>wifidisplaysessionaudiotrack</instance>
+            <instance>default</instance>
         </interface>
         <interface>
             <name>IWifiDisplaySessionImageTrack</name>
-            <instance>wifidisplaysessionimagetrack</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.drm</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.3::ICryptoFactory/wfdhdcp</fqname>
-        <fqname>@1.3::IDrmFactory/wfdhdcp</fqname>
-    </hal>
-    <!-- SensorCal HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.sensorscalibrate</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ISensorsCalibrate</name>
             <instance>default</instance>
         </interface>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.drm</name>
+        <version>1</version>
+        <fqname>IDrmFactory/wfdhdcp</fqname>
     </hal>
    <!-- IMS callinfo Service -->
    <hal format="hidl">
@@ -236,26 +156,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>default</instance>
         </interface>
    </hal>
-   <!-- Tether Offload -->
-   <hal format="hidl">
-      <name>android.hardware.tetheroffload.config</name>
-      <transport>hwbinder</transport>
-      <version>1.0</version>
-      <interface>
-          <name>IOffloadConfig</name>
-          <instance>default</instance>
-      </interface>
-   </hal>
-
-   <hal format="hidl">
-      <name>android.hardware.tetheroffload.control</name>
-      <transport>hwbinder</transport>
-      <version>1.1</version>
-      <interface>
-          <name>IOffloadControl</name>
-          <instance>default</instance>
-      </interface>
-   </hal>
    <!-- Data Link Latency -->
    <hal format="hidl">
         <name>vendor.qti.hardware.data.latency</name>
@@ -266,16 +166,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>default</instance>
         </interface>
    </hal>
-    <!-- DSP Service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.dsp</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IDspService</name>
-            <instance>dspservice</instance>
-        </interface>
-    </hal>
    <hal format="hidl">
         <name>vendor.qti.hardware.data.connection</name>
         <transport>hwbinder</transport>
@@ -364,38 +254,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>imsrtpservice</instance>
         </interface>
     </hal>
-
-    <!-- Factory HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.factory</name>
-        <transport>hwbinder</transport>
-        <version>1.1</version>
-        <interface>
-            <name>IFactory</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <!-- bluetooth -->
-    <hal format="hidl">
-        <name>android.hardware.bluetooth</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IBluetoothHci</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <hal format="hidl">
         <name>vendor.qti.hardware.bluetooth_audio</name>
-        <transport>hwbinder</transport>
-        <version>2.0</version>
-        <interface>
-            <name>IBluetoothAudioProvidersFactory</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.bluetooth.audio</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
@@ -422,16 +282,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
             <instance>default</instance>
         </interface>
     </hal>
-    <!-- CapabilityConfigStore HAL Service  -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.capabilityconfigstore</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ICapabilityConfigStore</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <!-- fm -->
     <hal format="hidl">
         <name>vendor.qti.hardware.fm</name>
@@ -439,17 +289,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <version>1.0</version>
         <interface>
             <name>IFmHci</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-
-    <!-- Alarm HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.alarm</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAlarm</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -466,18 +305,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
     </hal>
     <!--ANT-->
 
-    <!-- Neural Network HAL -->
-    <hal format="hidl">
-        <name>android.hardware.neuralnetworks</name>
-        <transport>hwbinder</transport>
-        <version>1.2</version>
-        <interface>
-            <name>IDevice</name>
-            <instance>qti-default</instance>
-            <instance>qti-dsp</instance>
-            <instance>qti-gpu</instance>
-        </interface>
-    </hal>
     <!--  QCC HAL Service -->
     <hal format="hidl">
        <name>vendor.qti.hardware.qccvndhal</name>
@@ -496,16 +323,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <interface>
             <name>IEmbms</name>
             <instance>embmsslServer0</instance>
-        </interface>
-    </hal>
-    <!-- QSPM-HAL service -->
-    <hal format="hidl">
-        <name>vendor.qti.qspmhal</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IQspmhal</name>
-            <instance>default</instance>
         </interface>
     </hal>
 </manifest>

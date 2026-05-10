@@ -2,9 +2,6 @@
 #
 # Product-specific compile-time definitions.
 #
-
-BOARD_SYSTEMSDK_VERSIONS := $(SHIPPING_API_LEVEL)
-
 TARGET_BOARD_PLATFORM := bengal
 TARGET_BOARD_SUFFIX := _612
 TARGET_BOOTLOADER_BOARD_NAME := bengal
@@ -25,6 +22,12 @@ TARGET_USES_UEFI := true
 TARGET_USES_REMOTEPROC := true
 TARGET_NO_KERNEL := false
 TARGET_SIGNONLY_BOOTLOADER := true
+
+ifeq ($(TARGET_NO_KERNEL), true)
+BOARD_PREBUILT_BOOTIMAGE := device/qcom/bengal_612/boot.img
+BOOT_OS_VERSION = $(PLATFORM_VERSION_LAST_STABLE)
+BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
+endif
 
 BOARD_RAMDISK_USE_LZ4 := true
 -include $(QCPATH)/common/bengal/BoardConfigVendor.mk
@@ -118,7 +121,7 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 BOARD_KERNEL-GKI_BOOTIMAGE_PARTITION_SIZE := $(BOARD_BOOTIMAGE_PARTITION_SIZE)
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 0x00800000
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 0x06000000
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 4294967296
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 17179869184
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_DTBOIMG_PARTITION_SIZE := 0x0800000
@@ -133,10 +136,24 @@ TARGET_USES_NEW_ION_API :=true
 BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_ODM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=qcom_geni,0x4a90000 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 bootconfig printk.devkmsg=on
+BOARD_KERNEL_CMDLINE := video=vfb:640x400,bpp=32,memsize=3072000
 
-BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1
+BOARD_BOOTCONFIG := androidboot.hardware=qcom androidboot.memcg=1 androidboot.load_modules_parallel=true
+
+# TARGET_CONSOLE_ENABLED allows to override the default kernel configuration
+# true  -- override kernel configuration to enable console
+# false -- override kernel configuration to disable console
+# <blank> (default) -- use kernel default configuration
+ifeq ($(TARGET_CONSOLE_ENABLED),true)
+BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200n8 earlycon qcom_geni_serial.con_enabled=1
+BOARD_BOOTCONFIG += androidboot.console=ttyMSM0
+else
+ifeq ($(TARGET_CONSOLE_ENABLED),false)
+BOARD_KERNEL_CMDLINE += qcom_geni_serial.con_enabled=0
+endif
+endif
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
