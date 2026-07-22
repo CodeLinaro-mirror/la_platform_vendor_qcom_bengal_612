@@ -114,4 +114,5 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <version>1</version>
         <fqname>IDrmFactory/wfdhdcp</fqname>
     </hal>
+
 </manifest>
