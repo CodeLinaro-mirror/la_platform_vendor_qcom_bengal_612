@@ -39,7 +39,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 PRODUCT_PROPERTY_OVERRIDES += persist.sys.fuse.passthrough.enable=true
 
 SHIPPING_API_LEVEL := 36
-PRODUCT_SHIPPING_API_LEVEL := 36
+PRODUCT_SHIPPING_API_LEVEL := 37
 
 # Set GRF/Vendor freeze properties
 BOARD_SHIPPING_API_LEVEL := 202504
