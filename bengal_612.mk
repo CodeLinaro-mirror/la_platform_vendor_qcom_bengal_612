@@ -372,6 +372,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml
 
+# Dumpstate Feature Flag
+PRODUCT_ENABLE_DUMPSTATE_SUPPORT := true
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
